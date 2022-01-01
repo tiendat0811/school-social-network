@@ -27,20 +27,4 @@ const User = new mongoose.Schema({
     }]
 })
 
-var UserModel = mongoose.model('User', User)
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-const username = "admin"
-const password = "admin"
-UserModel.findOne({ username: 'admin' }).then(data => {
-    bcrypt.hash(password, saltRounds, function (err, hash) {
-        UserModel.create({
-            username: username,
-            password: hash,
-            roles: "admin",
-            fullname: "Pham Tien Dat"
-        })
-    });
-})
-
-module.exports = mongoose.model('User', UserModel)
+module.exports = mongoose.model('User', User)

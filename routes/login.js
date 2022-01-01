@@ -5,6 +5,18 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+Users.findOne({ username: 'admin' }).then(data => {
+    bcrypt.hash('admin', saltRounds, function (err, hash) {
+        Users.create({
+            username: 'admin',
+            password: hash,
+            roles: "admin",
+            fullname: "Pham Tien Dat"
+        })
+    });
+})
+
+
 router.get('/', (req, res) => {
     res.render('login')
 })
