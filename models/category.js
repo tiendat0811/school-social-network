@@ -29,7 +29,7 @@ const createCategory = [
     { category: "Khoa Tài chính ngân hàng" },
     { category: "Khoa giáo dục quốc tế" }]
 
-// mongoose.model('Category', Category).create(
-//     createCategory
-// )
+mongoose.model('Category', Category).create(
+    createCategory
+)
 module.exports = mongoose.model('Category', Category)
