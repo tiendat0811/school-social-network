@@ -26,7 +26,7 @@ app.use(session({
 }))
 
 //khai báo mongo
-mongoose.connect('mongodb://localhost:27017/FinalWeb', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/FinalWeb', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(console.log('connect to database success'))

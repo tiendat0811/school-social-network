@@ -27,18 +27,20 @@ const User = new mongoose.Schema({
     }]
 })
 
-//Tạo tài khoản admin
-// const bcrypt = require('bcrypt');
-// const saltRounds = 10;
-// const username = "admin"
-// const password = "admin"
-// bcrypt.hash(password, saltRounds, function (err, hash) {
-//     mongoose.model('User', User).create({
-//         username: username,
-//         password: hash,
-//         roles: "admin",
-//         fullname: "Pham Tien Dat"
-//     })
-// });
+var UserModel = mongoose.model('User', User)
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const username = "admin"
+const password = "admin"
+UserModel.findOne({ username: 'admin' }).then(data => {
+    bcrypt.hash(password, saltRounds, function (err, hash) {
+        UserModel.create({
+            username: username,
+            password: hash,
+            roles: "admin",
+            fullname: "Pham Tien Dat"
+        })
+    });
+})
 
-module.exports = mongoose.model('User', User)
+module.exports = mongoose.model('User', UserModel)
