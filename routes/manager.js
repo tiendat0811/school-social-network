@@ -1,9 +1,13 @@
 const express = require('express')
 const router = express.Router()
+
 var cookieParser = require('cookie-parser')
-const Users = require('../models/user')
 router.use(cookieParser());
 
+const Users = require('../models/user')
+const Notifications = require('../models/notification')
+
+var ObjectId = require('mongodb').ObjectId;
 const jwt = require('jsonwebtoken');
 var secret = 'tiendat'
 
@@ -28,7 +32,7 @@ function checkLogin(req, res, next) {
 
 function checkManager(req, res, next) {
     var role = req.data.roles;
-    if (role === "manager") {
+    if (role === "manager" || role === 'admin') {
         next()
     } else {
         res.redirect('/')
@@ -36,7 +40,9 @@ function checkManager(req, res, next) {
 }
 
 router.get('/', checkLogin, checkManager, (req, res) => {
-    res.render('manager')
+    Notifications.find({ user: req.data._id.toString() }).then(data => {
+        res.render('manager', { user: req.data, notifications: data })
+    })
 })
 
 
@@ -51,10 +57,37 @@ router.put('/changePassword', checkLogin, checkManager, (req, res) => {
                 console.log(err)
                 return res.json({ success: false })
             }
-            console.log("Change password success");
             return res.json({ success: true })
         })
     })
 
 })
+
+router.put('/editNotification', checkLogin, checkManager, (req, res) => {
+    let title = req.body.title
+    let summary = req.body.summary
+    let detail = req.body.detail
+    Notifications.updateOne({ _id: new ObjectId(req.body.id) }, { $set: { title: title, summary: summary, detail: detail } }, (err, status) => {
+        if (err) {
+            console.log(err)
+            return res.json({ success: false, msg: 'Chỉnh sửa thông báo thất bại' })
+        }
+        return res.json({ success: true, msg: 'Chỉnh sửa thông báo thành công' })
+    })
+})
+
+router.delete('/deleteNotification', checkLogin, checkManager, (req, res) => {
+    Notifications.deleteOne({ _id: new ObjectId(req.body._id), user: req.data._id.toString() }, function (err, obj) {
+        if (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Xoá thông báo thất bại" })
+        }
+        if (obj.deletedCount === 1) {
+            return res.json({ success: true })
+        } else {
+            return res.json({ success: false, msg: "Bạn không có quyền xoá bài viết này" })
+        }
+    });
+})
+
 module.exports = router

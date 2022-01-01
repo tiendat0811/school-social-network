@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Users = require('../models/user')
-
+const Posts = require('../models/post')
 var cookieParser = require('cookie-parser')
 router.use(cookieParser());
 const jwt = require('jsonwebtoken');
@@ -36,8 +36,16 @@ function checkStudent(req, res, next) {
 }
 
 router.get('/', checkLogin, (req, res) => {
-    console.log(req.data)
-    res.render('student', { student: req.data })
+    Posts.find({ user: req.data._id.toString() }).then(data => {
+        res.render('student', { user: req.data, findUser: { id: null }, posts: data })
+    })
+})
+
+router.get('/:id?', checkLogin, (req, res) => {
+    let findUser = (req.params.id === req.data._id.toString())
+    Posts.find({ user: req.params.id }).then(data => {
+        res.render('student', { user: req.data, findUser: findUser, posts: data })
+    })
 })
 
 //update image
@@ -59,18 +67,17 @@ router.post('/updateAvatar', checkLogin, function (req, res) {
                 Users.updateOne({ _id: req.data._id }, { $set: { avatar: path } }, (err, status) => {
                     if (err) {
                         console.log(err)
-                        return res.render('student', { student: req.data, success: false })
+                        return res.render('student', { user: req.data, success: false })
                     }
                     let oldImg = "./public/" + req.data.avatar
                     unlinkAsync(oldImg)
                     console.log("Change avatar success");
-                    return res.render('student', { student: { avatar: path }, success: true })
+                    return res.render('student', { user: { avatar: path }, success: true })
                 })
             }
         })
     }
 });
-
 
 router.put('/updateStudent', checkLogin, checkStudent, (req, res) => {
     let fullname = req.body.fullname;

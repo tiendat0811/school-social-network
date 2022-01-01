@@ -1,5 +1,5 @@
-//----------LOAD POST
 
+//----------LOAD POST
 //document ready
 $(window).on('scroll', () => {
     const scroll = window.scrollY;
@@ -27,6 +27,7 @@ function getNotiByCategory() {
         getNotifications(notificationPage, category)
     }
     else {
+        notificationPage = 0
         getNotifications(notificationPage)
     }
 }
@@ -185,11 +186,15 @@ function renderOnePost(post, user) {
                 <div class="d-flex postOf">
                     <div class="caption-left d-flex">
                         <div class="user-avatar">
-                        <img src="${user.avatar}">
+                        <a href="/student/${post.user}">
+                        <img src="${post.avatar}">
+                        </a>
                         </div>         
                         <div class="name-time">
                         <span class="fullname">
-                            ${post.fullname}
+                        <a href="/student/${post.user}">
+                        ${post.fullname}
+                        </a>
                         </span><br>
                         <span class="time">
                             ${post.createTime}
@@ -209,12 +214,12 @@ function renderOnePost(post, user) {
                         <p id="id${post._id}" class="caption">
                             ${post.caption}
                         </p>
-                        <input type="text" id="id${post._id}">
+                        <input type="text" id="id${post._id}" class="editCaption">
                         <div class="button-confirm d-flex">
                             <button onclick="unEditPost('${post._id}')"
                                 id="id${post._id}"
                                 class="m-2 btn-danger">Huỷ</button>
-                            <button onclick="confirmEditPost('${post._id}"
+                            <button onclick="confirmEditPost('${post._id}')"
                                 id="id${post._id}"
                                 class="m-2 btn-success">Lưu</button>
                         </div>
@@ -250,11 +255,15 @@ function renderOneComment(comment, user) {
         <div class="comment-content rounded rounded-3 mt-2 mx-2 p-2 bg-light ">
           <div class="comment-content-header d-flex">
           <div class="user-avatar">
+                    <a href="/student/${comment.user}">
                     <img src="${user.avatar}">
+                    </a>
                     </div>
                     <div class="name-time">
                     <span class="fullname">
+                        <a href="/student/${comment.user}">
                         ${comment.fullname}
+                        </a>
                     </span><br>
                     <span class="time">
                         ${comment.createTime}
@@ -403,39 +412,23 @@ function createAccount() {
         }
     }).then(data => {
         if (data.success) {
-            alert("Tạo tài khoản thành công")
-            window.location.href = "/admin"
+            alert(data.msg)
+            $('#fullname').val('')
+            $('#username').val('')
+            $('#password').val('')
+            for (var i = 0; i < checkedValue.length; i++) {
+                if (checkedValue[i].checked) {
+                    console.log(checkedValue[i].value)
+                    checkedValue[i].checked = false
+                }
+            }
         } else {
-            alert("Tạo tài khoản thất bại")
+            alert(data.msg)
         }
-    }).catch(err => {
-
-        console.log(err)
     })
 }
 
 //----------ADMIN END
-
-//----------Manager
-function changePassword() {
-    $.ajax({
-        url: '/manager/changePassword',
-        type: 'put',
-        data: {
-            password: $('#password').val(),
-        }
-    }).then(data => {
-        if (data.success) {
-            alert("Đổi mật khẩu thành công")
-            window.location.href = "/manager"
-        } else {
-            alert("Đổi mật khẩu thất bại")
-        }
-    }).catch(err => {
-        console.log(err)
-    })
-}
-//----------Manager END
 
 //----------STUDENT
 
@@ -456,8 +449,6 @@ function updateStudent() {
         } else {
             alert("Cập nhật thông tin thất bại")
         }
-    }).catch(err => {
-        console.log(err)
     })
 }
 //----------STUDENT END
@@ -509,8 +500,6 @@ function addPost() {
         } else {
             alert(data.msg)
         }
-    }).catch(err => {
-        console.log(err)
     })
 }
 function previewImage(self) {
@@ -579,12 +568,6 @@ function editPost(id) {
     $(`.caption-left input#id${id}`).focus();
     //unfocus
 
-    //Enter sau khi edit
-    $(`.caption-left input#id${id}`).on('keyup', function (e) {
-        if (e.keyCode === 13) {
-            confirmEditPost(id)
-        }
-    });
 }
 function confirmEditPost(id) {
     $.ajax({
@@ -599,12 +582,10 @@ function confirmEditPost(id) {
             $(`p#id${id}`).html($(`input#id${id}`).val())
             $(`p#id${id}`).css("display", "")
             $(`button#id${id}`).css("display", "none")
-            $(`input#id${id}`).css("display", "none")
+            $(`input#id${id}.editCaption`).css("display", "none")
         } else {
             alert(data.msg)
         }
-    }).catch(err => {
-        console.log(err)
     })
 }
 function deletePost(id) {
@@ -622,14 +603,34 @@ function deletePost(id) {
             } else {
                 alert(data.msg)
             }
-        }).catch(err => {
-            console.log(err)
         })
     }
 }
 
 //add a notification
 var socket = io();
+socket.on('notification', function (notification) {
+    console.log('alo al')
+    var html = `<a href="/notification/${notification.id}"><div class="card">
+    <div class="card-header">
+        Thông báo
+    </div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <p>${notification.category} đã đăng 1 thông báo</p>
+            <footer class="blockquote-footer">${notification.title}
+            </footer>
+        </blockquote>
+    </div>
+</div>
+</a>`
+    $('.new-notification-2').css("display", "block")
+    $('.new-notification').html(html)
+    setTimeout(function () {
+        $('.new-notification').html('')
+        $('.new-notification-2').css("display", "none")
+    }, 5000);
+});
 function addNotification() {
     var title = $('#notiTitle').val()
     var summary = $('#notiSummary').val()
@@ -657,34 +658,12 @@ function addNotification() {
                 $('#permission option[value="1"]').attr('selected', 'selected');
                 socket.emit('notification', {
                     title: data.notiResult.title,
-                    category: data.notiResult.category
-                });
-                socket.on('notification', function (notification) {
-                    var html = `<a href="/notification/${data.notiResult._id}"><div class="card">
-                    <div class="card-header">
-                        Thông báo
-                    </div>
-                    <div class="card-body">
-                        <blockquote class="blockquote mb-0">
-                            <p>${notification.category} đã đăng 1 thông báo</p>
-                            <footer class="blockquote-footer">${notification.title}
-                            </footer>
-                        </blockquote>
-                    </div>
-                </div>
-                </a>`
-                    $('.new-notification-2').css("display", "block")
-                    $('.new-notification').html(html)
-                    setTimeout(function () {
-                        $('.new-notification').html('')
-                        $('.new-notification-2').css("display", "none")
-                    }, 5000);
+                    category: data.notiResult.category,
+                    id: data.notiResult._id
                 });
             } else {
                 alert(data.msg)
             }
-        }).catch(err => {
-            console.log(err)
         })
     }
 }
@@ -792,3 +771,111 @@ function deleteComment(id) {
     }
 }
 //----------INDEX-POST-END
+
+//----------MANAGER-NOTIFICATION
+function changePassword() {
+    $.ajax({
+        url: '/manager/changePassword',
+        type: 'put',
+        data: {
+            password: $('#password').val(),
+        }
+    }).then(data => {
+        if (data.success) {
+            alert("Đổi mật khẩu thành công")
+            $('#password').val('')
+        } else {
+            alert("Đổi mật khẩu thất bại")
+        }
+    })
+}
+
+function showEditNoti(id) {
+    $(`.one-notice#id${id} input.title`).val($(`.one-notice#id${id} p.title`).html().trim())
+    $(`.one-notice#id${id} input.title`).css("display", "block")
+    $(`.one-notice#id${id} p.title`).css("display", "none")
+
+    $(`.one-notice#id${id} input.summary`).val($(`.one-notice#id${id} p.summary`).html().trim())
+    $(`.one-notice#id${id} input.summary`).css("display", "block")
+    $(`.one-notice#id${id} p.summary`).css("display", "none")
+
+    $(`.one-notice#id${id} textarea.detail`).val($(`.one-notice#id${id} p.detail`).html().trim())
+    $(`.one-notice#id${id} textarea.detail`).css("display", "block")
+    $(`.one-notice#id${id} p.detail`).css("display", "none")
+
+    $(`.confirm-btn#id${id}`).css("display", "block")
+}
+
+function unEditNoti(id, success) {
+    if (success) {
+        $(`.one-notice#id${id} p.title`).html($(`.one-notice#id${id} input.title`).val())
+        $(`.one-notice#id${id} input.title`).css("display", "none")
+        $(`.one-notice#id${id} p.title`).css("display", "block")
+
+        $(`.one-notice#id${id} p.summary`).html($(`.one-notice#id${id} input.summary`).val())
+        $(`.one-notice#id${id} input.summary`).css("display", "none")
+        $(`.one-notice#id${id} p.summary`).css("display", "block")
+
+        $(`.one-notice#id${id} p#detail`).html($(`.one-notice#id${id} textarea.detail`).val())
+        $(`.one-notice#id${id} textarea.detail`).css("display", "none")
+        $(`.one-notice#id${id} p#.etail`).css("display", "block")
+
+        $(`.confirm-btn#id${id}`).css("display", "none")
+    } else {
+        $(`.one-notice#id${id} input.title`).css("display", "none")
+        $(`.one-notice#id${id} p.title`).css("display", "block")
+
+        $(`.one-notice#id${id} input.summary`).css("display", "none")
+        $(`.one-notice#id${id} p.summary`).css("display", "block")
+
+        $(`.one-notice#id${id} textarea.detail`).css("display", "none")
+        $(`.one-notice#id${id} p.detail`).css("display", "block")
+
+        $(`.confirm-btn#id${id}`).css("display", "none")
+    }
+}
+function editNotification(id) {
+    showEditNoti(id)
+}
+
+function confirmEditNoti(id) {
+    var title = $(`.one-notice#id${id} input.title`).val()
+    var summary = $(`.one-notice#id${id} input.summary`).val()
+    var detail = $(`.one-notice#id${id} textarea.detail`).val()
+
+    $.ajax({
+        url: '/manager/editNotification',
+        type: 'put',
+        data: {
+            id: id,
+            title: title,
+            summary: summary,
+            detail: detail
+        }
+    }).then(data => {
+        if (data.success) {
+            unEditNoti(id, true)
+        } else {
+            alert(data.msg)
+        }
+    })
+}
+
+function deleteNotification(id) {
+    let result = confirm("Bạn chắc chắn muốn xoá thông báo này chứ?");
+    if (result === true) {
+        $.ajax({
+            url: '/manager/deleteNotification',
+            type: 'delete',
+            data: {
+                _id: id,
+            }
+        }).then(data => {
+            if (data.success) {
+                $(`.one-notice#id${id}`).remove();
+            } else {
+                alert(data.msg)
+            }
+        })
+    }
+}

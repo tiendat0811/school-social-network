@@ -61,7 +61,7 @@ router.get('/:category/:p', (req, res) => {
     })
 })
 
-router.get('/:id', checkLogin, (req, res) => {
+router.get('/:id?', checkLogin, (req, res) => {
     Notifications.findOne({ _id: req.params.id }).then(data => {
         res.render('notification-detail', { user: req.data, notification: data })
     })

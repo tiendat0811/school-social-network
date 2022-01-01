@@ -23,6 +23,9 @@ const Post = new mongoose.Schema({
     fullname: {
         type: String
     },
+    avatar: {
+        type: String
+    }
 })
 
 

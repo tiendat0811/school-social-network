@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+var ObjectId = require('mongodb').ObjectId;
 
 const Users = require('../models/user')
 const Posts = require('../models/post')
@@ -135,6 +136,7 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
 //đăng xuất
 router.get('/logout', (req, res) => {
     console.log("logout")
+    req.session = null
     res.json({ logout: true })
 })
 
@@ -208,13 +210,13 @@ function checkYoutubeUrl(url) {
 }
 
 //sửa bài
-var ObjectId = require('mongodb').ObjectId;
 router.put('/updateCaption', checkLogin, (req, res) => {
-    Posts.updateOne({ _id: new ObjectId(req.body._id), user: req.data._id.toString() }, { $set: { caption: req.body.caption } }, (err, obj) => {
+    Posts.updateOne({ $and: [{ _id: new ObjectId(req.body._id) }, { user: req.data._id.toString() }] }, { $set: { caption: req.body.caption } }, (err, obj) => {
         if (err) {
             console.log(err)
             return res.json({ success: false, msg: "Chỉnh sửa bài viết thất bại" })
         }
+        console.log(obj)
         if (obj.modifiedCount === 1) {
             return res.json({ success: true })
         } else {
@@ -222,18 +224,21 @@ router.put('/updateCaption', checkLogin, (req, res) => {
         }
     })
 })
-const fs = require('fs')
-const { promisify } = require('util')
-const unlinkAsync = promisify(fs.unlink)
-//unlinkAsync(oldImg)
+
 //Xoá bài
 router.delete('/deletePost', checkLogin, (req, res) => {
-    Posts.deleteOne({ _id: new ObjectId(req.body._id), user: req.data._id.toString() }, function (err, obj) {
+    let postId = new ObjectId(req.body._id)
+    Posts.deleteOne({ _id: postId, user: req.data._id.toString() }, function (err, obj) {
         if (err) {
             console.log(err)
             return res.json({ success: false, msg: "Xoá bài viết thất bại" })
         }
         if (obj.deletedCount === 1) {
+            Comments.deleteMany({ postId: postId }, function (error, result) {
+                if (error) {
+                    console.log(error)
+                }
+            })
             return res.json({ success: true })
         } else {
             return res.json({ success: false, msg: "Bạn không có quyền xoá bài viết này" })
@@ -247,13 +252,12 @@ router.post('/addNotification', checkLogin, (req, res) => {
     let summary = req.body.summary
     let detail = req.body.detail
     let category = req.body.permission
-
     let notification = new Notifications({
         title: title,
         summary: summary,
         detail: detail,
         category: category,
-        user: req.data._id,
+        user: req.data._id.toString(),
         fullname: req.data.fullname,
         createAt: Date.now()
     })

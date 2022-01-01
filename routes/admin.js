@@ -41,7 +41,7 @@ router.get('/', checkLogin, checkAdmin, (req, res) => {
         for (let i = 0; i < data.length; i++) {
             category.push(data[i].category)
         }
-        res.render('admin', { category: category })
+        res.render('admin', { category: category, user: req.data })
     }).catch(err => {
         console.log(err)
         res.render('admin')
@@ -55,8 +55,7 @@ router.post('/register', checkLogin, checkAdmin, (req, res) => {
     let permission = JSON.parse(req.body.permission);
     Users.findOne({ username: username }, (err, user) => {
         if (user) {
-            console.log("Username already exists!")
-            return res.json({ success: false })
+            return res.json({ success: false, msg: 'Tài khoản đã tồn tại' })
         } else {
             bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
                 let us = new Users({
@@ -68,11 +67,9 @@ router.post('/register', checkLogin, checkAdmin, (req, res) => {
                 })
                 us.save((error, user) => {
                     if (error) {
-                        console.log(error)
                         return res.json({ success: false, msg: error })
                     }
-                    console.log('register success')
-                    return res.json({ success: true })
+                    return res.json({ success: true, msg: "Tạo tài khoản thành công" })
                 });
             });
         }
