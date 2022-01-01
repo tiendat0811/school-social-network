@@ -26,7 +26,7 @@ app.use(session({
 }))
 
 //khai báo mongo
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://tiendat0811:tiendat0811@cluster0.ph1pu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://tiendat0811:tiendat0811@cluster0.ph1pu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority&ssl=true', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(console.log('connect to database success'))
