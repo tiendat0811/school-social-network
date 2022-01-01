@@ -366,6 +366,12 @@ select{
   .col-md-2{
     display: none;
   }
+  .col-md-3{
+    display: none;
+  }
+  .col-md-7{
+    width: 100%;
+  }
   .showPost .attach iframe{
     width: 100%;
   }
