@@ -16,7 +16,6 @@ Users.findOne({ username: 'admin' }).then(data => {
     });
 })
 
-
 router.get('/', (req, res) => {
     res.render('login')
 })
