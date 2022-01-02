@@ -146,16 +146,28 @@ router.use(fileUpload());
 router.post('/addPost', checkLogin, (req, res) => {
     let caption = req.body.caption;
     let video = checkYoutubeUrl(req.body.video);
-    let image = req.body.image
-    let post = new Posts({
-        caption: caption,
-        image: image,
-        video: video,
-        user: req.data._id,
-        fullname: req.data.fullname,
-        avatar: req.data.avatar,
-        createAt: Date.now()
-    })
+    let post
+    if (req.body.image) {
+        post = new Posts({
+            caption: caption,
+            image: req.body.image,
+            video: video,
+            user: req.data._id,
+            fullname: req.data.fullname,
+            avatar: req.data.avatar,
+            createAt: Date.now()
+        })
+    } else {
+        post = new Posts({
+            caption: caption,
+            video: video,
+            user: req.data._id,
+            fullname: req.data.fullname,
+            avatar: req.data.avatar,
+            createAt: Date.now()
+        })
+    }
+
     post.save((error, postResult) => {
         if (error) {
             console.log(error)

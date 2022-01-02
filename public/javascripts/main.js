@@ -530,7 +530,10 @@ function addPostToDB(img) {
     var formData = new FormData();
     formData.append('caption', caption);
     formData.append('video', video);
-    formData.append('image', postImg)
+    if (postImg) {
+        console.log('have image')
+        formData.append('image', postImg)
+    }
     $.ajax({
         url: '/addPost',
         type: 'post',
