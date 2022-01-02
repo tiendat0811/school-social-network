@@ -519,6 +519,9 @@ function addPost() {
             })
             .catch(console.error);
     }
+    else {
+        addPostToDB(null)
+    }
 }
 function addPostToDB(img) {
     var postImg = img
