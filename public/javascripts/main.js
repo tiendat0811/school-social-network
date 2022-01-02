@@ -34,6 +34,7 @@ function uploadAvatar() {
                 if (data.success) {
                     alert(data.msg)
                     document.querySelector("#avatar").src = url;
+                    document.querySelector(".user-avatar img").src = url
                 }
                 else {
                     alert(data.msg)
