@@ -55,28 +55,14 @@ const unlinkAsync = promisify(fs.unlink)
 // Delete the old file
 
 router.post('/updateAvatar', checkLogin, function (req, res) {
-    if (req.files) {
-        var file = req.files.userPhoto;
-        var random = Math.floor(Math.random() * 9999999999999999);
-        var path = '/images/avatar/' + random + file.name
-        file.mv('./public' + path, (err) => {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log('post with image')
-                Users.updateOne({ _id: req.data._id }, { $set: { avatar: path } }, (err, status) => {
-                    if (err) {
-                        console.log(err)
-                        return res.render('student', { user: req.data, success: false })
-                    }
-                    let oldImg = "./public/" + req.data.avatar
-                    unlinkAsync(oldImg)
-                    console.log("Change avatar success");
-                    return res.render('student', { user: { avatar: path }, success: true })
-                })
-            }
-        })
-    }
+    Users.updateOne({ _id: req.data._id }, { $set: { avatar: req.body.avatar } }, (err, status) => {
+        if (err) {
+            console.log(err)
+            return res.json({ user: req.data, success: false, msg: 'Cập nhật ảnh dại diện thất bại' })
+        }
+        console.log("Change avatar success");
+        return res.json({ user: { avatar: req.body.avatar }, success: true, msg: 'Cập nhật ảnh đại diện thành công' })
+    })
 });
 
 router.put('/updateStudent', checkLogin, checkStudent, (req, res) => {

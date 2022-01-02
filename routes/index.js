@@ -146,22 +146,10 @@ router.use(fileUpload());
 router.post('/addPost', checkLogin, (req, res) => {
     let caption = req.body.caption;
     let video = checkYoutubeUrl(req.body.video);
-    if (req.files) {
-        var file = req.files.image;
-        var random = Math.floor(Math.random() * 99999999999999);
-        var path = '/images/post/' + random + file.name
-        file.mv('./public' + path, (err) => {
-            let image = ''
-            if (err) {
-                console.log(err)
-            } else {
-                console.log('post with image')
-            }
-        })
-    }
+    let image = req.body.image
     let post = new Posts({
         caption: caption,
-        image: path,
+        image: image,
         video: video,
         user: req.data._id,
         fullname: req.data.fullname,

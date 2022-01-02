@@ -1,4 +1,48 @@
 
+//upload Image to firebase
+var firebaseConfig = {
+    apiKey: "AIzaSyDDZttt4vp425JGImaSa_DBGIGM47nKHWo",
+    authDomain: "web-final-project-336206.firebaseapp.com",
+    projectId: "web-final-project-336206",
+    storageBucket: "web-final-project-336206.appspot.com",
+    messagingSenderId: "383757308698",
+    appId: "1:383757308698:web:70437579d1eaa5969492a3",
+    measurementId: "G-KJB14NDSS0"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+function uploadAvatar() {
+    const ref = firebase.storage().ref();
+    const file = document.querySelector("#file-input").files[0];
+    const name = +new Date() + "-" + file.name;
+    const metadata = {
+        contentType: file.type
+    };
+    const task = ref.child(name).put(file, metadata);
+    task
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(url => {
+
+            $.ajax({
+                url: '/student/updateAvatar',
+                type: 'post',
+                data: {
+                    avatar: url
+                }
+            }).then(data => {
+                if (data.success) {
+                    alert(data.msg)
+                    document.querySelector("#avatar").src = url;
+                }
+                else {
+                    alert(data.msg)
+                }
+            })
+        })
+        .catch(console.error);
+}
+
 //----------LOAD POST
 //document ready
 $(window).on('scroll', () => {
@@ -457,14 +501,32 @@ function updateStudent() {
 
 //add a post
 function addPost() {
+    const file = document.querySelector("#image").files[0];
+    if (file) {
+        const ref = firebase.storage().ref();
+        const name = +new Date() + "-" + file.name;
+        const metadata = {
+            contentType: file.type
+        };
+        const task = ref.child(name).put(file, metadata);
+        var postImg = ''
+        task
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                console.log(url)
+                addPostToDB(url)
+            })
+            .catch(console.error);
+    }
+}
+function addPostToDB(img) {
+    var postImg = img
     var caption = $('#caption').val();
     var video = $('#video').val();
-    var image = document.getElementById("image").files;
-
     var formData = new FormData();
     formData.append('caption', caption);
     formData.append('video', video);
-    formData.append('image', image[0])
+    formData.append('image', postImg)
     $.ajax({
         url: '/addPost',
         type: 'post',
@@ -879,3 +941,4 @@ function deleteNotification(id) {
         })
     }
 }
+

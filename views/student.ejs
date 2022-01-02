@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
         integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
     <script src="/javascripts/main.js"></script>
     <link rel="stylesheet" href="/stylesheets/style.css">
     <title>Trang cá nhân</title>
@@ -103,16 +105,13 @@
                         <% if(findUser){ %>
                             <div class="update-student-info">
                                 <div class="avatar text-center m-3">
-                                    <form id="uploadForm" enctype="multipart/form-data" action="/student/updateAvatar"
-                                        method="post">
-                                        <div class="image-upload">
-                                            <label for="file-input">
-                                                <img src="<%=user.avatar%>" id="avatar" />
-                                            </label>
-                                            <input class="d-none" id="file-input" type="file" name="userPhoto"
-                                                onchange="form.submit()" accept="image/*" />
-                                        </div>
-                                    </form>
+                                    <div class="image-upload">
+                                        <label for="file-input">
+                                            <img src="<%=user.avatar%>" id="avatar" />
+                                        </label>
+                                        <input class="d-none" id="file-input" type="file" name="userPhoto"
+                                            onchange="uploadAvatar()" accept="image/*" />
+                                    </div>
                                 </div>
                                 <div class="info w-50 m-auto">
                                     <div class="mb-3">
