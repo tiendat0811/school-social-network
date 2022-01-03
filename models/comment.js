@@ -6,7 +6,6 @@ const Comment = new mongoose.Schema({
     },
     createTime: {
         type: String,
-        default: new Date().toLocaleString()
     },
     createAt: {
         type: String,

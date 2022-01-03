@@ -144,6 +144,7 @@ router.get('/logout', (req, res) => {
 const fileUpload = require('express-fileupload');
 router.use(fileUpload());
 router.post('/addPost', checkLogin, (req, res) => {
+    console.log(req.body)
     let caption = req.body.caption;
     let video = checkYoutubeUrl(req.body.video);
     let post
@@ -155,7 +156,8 @@ router.post('/addPost', checkLogin, (req, res) => {
             user: req.data._id,
             fullname: req.data.fullname,
             avatar: req.data.avatar,
-            createAt: Date.now()
+            createAt: Date.now(),
+            createTime: new Date().toLocaleString()
         })
     } else {
         post = new Posts({
@@ -164,7 +166,8 @@ router.post('/addPost', checkLogin, (req, res) => {
             user: req.data._id,
             fullname: req.data.fullname,
             avatar: req.data.avatar,
-            createAt: Date.now()
+            createAt: Date.now(),
+            createTime: new Date().toLocaleString()
         })
     }
 
@@ -259,7 +262,8 @@ router.post('/addNotification', checkLogin, (req, res) => {
         category: category,
         user: req.data._id.toString(),
         fullname: req.data.fullname,
-        createAt: Date.now()
+        createAt: Date.now(),
+        createTime: new Date().toLocaleString()
     })
     notification.save((error, notiResult) => {
         if (error) {
@@ -282,7 +286,8 @@ router.post('/addComment', checkLogin, (req, res) => {
         user: req.data._id,
         fullname: req.data.fullname,
         avatar: req.data.avatar,
-        createAt: Date.now()
+        createAt: Date.now(),
+        createTime: new Date().toLocaleString()
     })
     newComment.save((error, notiResult) => {
         if (error) {
