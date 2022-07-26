@@ -21,9 +21,12 @@ Step 2: Install MongoDB https://www.mongodb.com/docs/manual/installation/
 Step 3: Make sure local mongoDb url is localhost:27017 or you can edit it with MONGODB_URI value in .env file
 
 Step 4: Open cmd and run these commands
-install package
+install package:
+
 -- npm install
-run web
+
+run web:
+
 -- npm start
 
 Step 5: Open any brower and enter http://localhost:3000/
