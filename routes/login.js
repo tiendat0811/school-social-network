@@ -6,14 +6,17 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 Users.findOne({ username: 'admin' }).then(data => {
-    bcrypt.hash('admin', saltRounds, function (err, hash) {
-        Users.create({
-            username: 'admin',
-            password: hash,
-            roles: "admin",
-            fullname: "Pham Tien Dat"
-        })
-    });
+    if (!data) {
+        bcrypt.hash('admin', saltRounds, function (err, hash) {
+            Users.create({
+                username: 'admin',
+                password: hash,
+                roles: "admin",
+                fullname: "Pham Tien Dat",
+                avatar: "https://lawfullylegal.com/wp-content/uploads/2021/01/AnyConv.com__images-2.jpg"
+            })
+        });
+    }
 })
 
 router.get('/', (req, res) => {

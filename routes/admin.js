@@ -63,7 +63,8 @@ router.post('/register', checkLogin, checkAdmin, (req, res) => {
                     username: req.body.username,
                     password: hash,
                     permission: permission,
-                    roles: "manager"
+                    roles: "manager",
+                    avatar: "https://vcdn-sohoa.vnecdn.net/2022/06/21/Elon-Musk-Twitter-5892-1655824638.jpg"
                 })
                 us.save((error, user) => {
                     if (error) {
