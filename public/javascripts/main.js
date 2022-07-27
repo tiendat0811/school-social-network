@@ -102,7 +102,6 @@ function nextPageCategory() {
     if (categoryCurrent) {
         notificationPage = notificationPage + 1
         getNotifications(notificationPage, categoryCurrent)
-        console.log(categoryCurrent)
         setPageButton()
     } else {
         notificationPage = notificationPage + 1
@@ -463,7 +462,6 @@ function createAccount() {
             $('#password').val('')
             for (var i = 0; i < checkedValue.length; i++) {
                 if (checkedValue[i].checked) {
-                    console.log(checkedValue[i].value)
                     checkedValue[i].checked = false
                 }
             }
@@ -514,7 +512,6 @@ function addPost() {
         task
             .then(snapshot => snapshot.ref.getDownloadURL())
             .then(url => {
-                console.log(url)
                 addPostToDB(url)
             })
             .catch(console.error);
@@ -531,7 +528,6 @@ function addPostToDB(img) {
     formData.append('caption', caption);
     formData.append('video', video);
     if (postImg) {
-        console.log('have image')
         formData.append('image', postImg)
     }
     $.ajax({
@@ -679,7 +675,6 @@ function deletePost(id) {
 //add a notification
 var socket = io();
 socket.on('notification', function (notification) {
-    console.log('alo al')
     var html = `<a href="/notification/${notification.id}"><div class="card">
     <div class="card-header">
         Thông báo

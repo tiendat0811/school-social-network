@@ -60,7 +60,6 @@ router.post('/updateAvatar', checkLogin, function (req, res) {
             console.log(err)
             return res.json({ user: req.data, success: false, msg: 'Cập nhật ảnh dại diện thất bại' })
         }
-        console.log("Change avatar success");
         return res.json({ user: { avatar: req.body.avatar }, success: true, msg: 'Cập nhật ảnh đại diện thành công' })
     })
 });
@@ -74,7 +73,6 @@ router.put('/updateStudent', checkLogin, checkStudent, (req, res) => {
             console.log(err)
             return res.json({ success: false })
         }
-        console.log("Update student success");
         return res.json({ success: true })
     })
 })

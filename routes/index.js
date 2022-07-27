@@ -143,7 +143,6 @@ router.get('/logout', (req, res) => {
 const fileUpload = require('express-fileupload');
 router.use(fileUpload());
 router.post('/addPost', checkLogin, (req, res) => {
-    console.log(req.body)
     let caption = req.body.caption;
     let video = checkYoutubeUrl(req.body.video);
     let post
@@ -175,7 +174,6 @@ router.post('/addPost', checkLogin, (req, res) => {
             console.log(error)
             return res.json({ msg: error, success: false })
         }
-        console.log('add post success')
         return res.json({ success: true, postResult: postResult, msg: 'Đăng bài viết thành công' })
     });
 })
@@ -218,7 +216,6 @@ router.put('/updateCaption', checkLogin, (req, res) => {
             console.log(err)
             return res.json({ success: false, msg: "Chỉnh sửa bài viết thất bại" })
         }
-        console.log(obj)
         if (obj.modifiedCount === 1) {
             return res.json({ success: true })
         } else {
@@ -269,7 +266,6 @@ router.post('/addNotification', checkLogin, (req, res) => {
             console.log(error)
             return res.json({ msg: error, success: false })
         }
-        console.log('add notification success')
         return res.json({ success: true, notiResult: notiResult, msg: 'Đăng thông báo thành công' })
     });
 })
@@ -293,14 +289,13 @@ router.post('/addComment', checkLogin, (req, res) => {
             console.log(error)
             return res.json({ msg: error, success: false })
         }
-        console.log('add comment success')
         return res.json({ success: true, newComment: newComment, msg: 'Đăng bình luận thành công' })
     });
 })
 
 //Sửa comment
 router.put('/updateComment', checkLogin, (req, res) => {
-    console.log(req.body)
+    
     Comments.updateOne({ _id: new ObjectId(req.body._id), user: req.data._id.toString() }, { $set: { comment: req.body.comment } }, (err, obj) => {
         if (err) {
             console.log(err)
@@ -321,7 +316,7 @@ router.delete('/deleteComment', checkLogin, (req, res) => {
             console.log(err)
             return res.json({ success: false, msg: "Xoá bình luận thất bại" })
         }
-        console.log(obj)
+      
         if (obj.deletedCount === 1) {
             return res.json({ success: true })
         } else {

@@ -121,7 +121,6 @@ router.put('/updateAccount', checkLogin, checkAdmin, (req, res) => {
         username: req.body.user.username,
         permission: JSON.parse(req.body.user.permission),
     }
-    console.log(req.body.user.password)
     bcrypt.hash(req.body.user.password, saltRounds, function (err, hash) {
         user.password = hash;
         Users.updateOne({ _id: new ObjectId(req.body.user._id) }, { $set: user }, (err, obj) => {
