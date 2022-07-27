@@ -41,7 +41,7 @@ function checkManager(req, res, next) {
 
 router.get('/', checkLogin, checkManager, (req, res) => {
     Notifications.find({ user: req.data._id.toString() }).then(data => {
-        res.render('manager', { user: req.data, notifications: data })
+        res.render('manager', { title: "Quản lý phòng khoa", user: req.data, notifications: data })
     })
 })
 

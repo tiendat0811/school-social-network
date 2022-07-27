@@ -28,7 +28,7 @@ function checkLogin(req, res, next) {
             console.log(err)
         })
     } catch (error) {
-        return res.redirect('/login')
+        return res.redirect('login')
     }
 }
 router.get('/', checkLogin, (req, res) => {
@@ -42,14 +42,14 @@ router.get('/', checkLogin, (req, res) => {
             for (let i = 0; i < data.length; i++) {
                 category.push(data[i])
             }
-            res.render('index', { user: req.data, notification: notification, category: category })
+            res.render('index', { title: "Trang chủ", user: req.data, notification: notification, category: category })
         }).catch(err => {
             console.log(err)
-            res.render('index')
+            res.render('index', { title: "Trang chủ" })
         })
     }).catch(err => {
         console.log(err)
-        res.render('index')
+        res.render('index', { title: "Trang chủ" })
     })
 })
 
@@ -135,7 +135,6 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
 
 //đăng xuất
 router.get('/logout', (req, res) => {
-    console.log("logout")
     req.session = null
     res.json({ logout: true })
 })

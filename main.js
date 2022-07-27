@@ -4,6 +4,8 @@ const path = require('path');
 const mongoose = require('mongoose')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const expresslayout = require('express-ejs-layouts')
+
 //socket
 const app = express();
 
@@ -14,6 +16,9 @@ const comments = require('./models/comment')
 const notifications = require('./models/notification')
 
 //set view và session
+//app use expresslayout
+app.use(expresslayout)
+app.set('layout', 'layouts/layout')
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())

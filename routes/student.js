@@ -35,16 +35,16 @@ function checkStudent(req, res, next) {
     }
 }
 
-router.get('/', checkLogin, (req, res) => {
+router.get('/', checkLogin, checkStudent, (req, res) => {
     Posts.find({ user: req.data._id.toString() }).then(data => {
-        res.render('student', { user: req.data, findUser: { id: null }, posts: data })
+        res.render('student', { title: req.data.fullname, user: req.data, findUser: { id: null }, posts: data })
     })
 })
 
 router.get('/:id?', checkLogin, (req, res) => {
     let findUser = (req.params.id === req.data._id.toString())
     Posts.find({ user: req.params.id }).then(data => {
-        res.render('student', { user: req.data, findUser: findUser, posts: data })
+        res.render('student', { title: req.data.fullname, user: req.data, findUser: findUser, posts: data })
     })
 })
 

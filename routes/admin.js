@@ -41,10 +41,36 @@ router.get('/', checkLogin, checkAdmin, (req, res) => {
         for (let i = 0; i < data.length; i++) {
             category.push(data[i].category)
         }
-        res.render('admin', { category: category, user: req.data })
+        res.render('admin', { category: category, user: req.data, title: 'Admin' })
     }).catch(err => {
         console.log(err)
-        res.render('admin')
+        res.redirect('/')
+    })
+})
+
+router.get('/manager', checkLogin, checkAdmin, (req, res) => {
+    Categories.find().then(data => {
+        let category = [];
+        for (let i = 0; i < data.length; i++) {
+            category.push(data[i].category)
+        }
+        //find user with roles = admin
+        Users.find({
+            roles: 'manager'
+        }).then(manager => {
+            let account = [];
+            for (let i = 0; i < manager.length; i++) {
+                account.push(manager[i])
+            }
+            res.render('admin-manager', { account: account, category: category, user: req.data, title: 'Manager', admin: data })
+        }
+        ).catch(err => {
+            console.log(err)
+            res.redirect('/')
+        })
+    }).catch(err => {
+        console.log(err)
+        res.redirect('/')
     })
 })
 
@@ -74,6 +100,41 @@ router.post('/register', checkLogin, checkAdmin, (req, res) => {
                 });
             });
         }
+    })
+})
+
+var ObjectId = require('mongodb').ObjectId;
+router.delete('/delete-account', checkLogin, checkAdmin, (req, res) => {
+    let accountId = new ObjectId(req.body._id)
+    Users.deleteOne({ _id: accountId }, function (err, obj) {
+        if (err) {
+            console.log(err)
+            return res.json({ success: false, msg: "Xoá tài khoản thất bại!" })
+        }
+        return res.json({ success: true, msg: "Xoá tài khoản thành công!" })
+    });
+})
+
+router.put('/updateAccount', checkLogin, checkAdmin, (req, res) => {
+    const user = {
+        fullname: req.body.user.fullname,
+        username: req.body.user.username,
+        permission: JSON.parse(req.body.user.permission),
+    }
+    console.log(req.body.user.password)
+    bcrypt.hash(req.body.user.password, saltRounds, function (err, hash) {
+        user.password = hash;
+        Users.updateOne({ _id: new ObjectId(req.body.user._id) }, { $set: user }, (err, obj) => {
+            if (err) {
+                console.log(err)
+                return res.json({ success: false, msg: "Cập nhật thất bại" })
+            }
+            if (obj.modifiedCount === 1) {
+                return res.json({ success: true, msg: "Cập nhật thông tin thành công" })
+            } else {
+                return res.json({ success: false, msg: "Không có gì cập nhật mới" })
+            }
+        })
     })
 })
 

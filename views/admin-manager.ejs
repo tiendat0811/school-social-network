@@ -1,0 +1,152 @@
+<div class="bg-dark p-2 mt-3 notice-detail-header">
+    <h5 class="text-white">QUẢN LÝ PHÒNG KHOA</h5>
+
+</div>
+<%- include("./partials/admin-menu.ejs") %>
+
+    <div class="center-item border border-3 mt-3 rounded rounded-3">
+        <!-- code here -->
+        <div class="title text-center m-2">
+            <h3>Tạo tài khoản phòng/khoa</h3>
+        </div>
+        <div class="form-register w-50 m-auto">
+            <div class="mb-3">
+                <label for="username" class="form-label">Tài khoản</label>
+                <input type="text" class="mainForm form-control" id="username" placeholder="" name="username">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input type="password" class="mainForm form-control" id="password" placeholder="" name="password">
+            </div>
+            <div class="mb-3">
+                <label for="fullname" class="form-label">Tên Phòng/Khoa</label>
+                <input type="text" class="mainForm form-control" id="fullname" placeholder="" name="fullname">
+            </div>
+            <div class="dropdown mb-3">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Chọn chuyên mục
+                </a>
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <% for(let i=0; i < category.length; i++){ %>
+                        <li><a class="dropdown-item" href="#">
+                                <input class="mainForm categoryCheckbox" type="checkbox" value="<%=category[i] %>"
+                                    id="main">
+                                <%= category[i] %>
+                                    <% } %>
+                            </a></li>
+                </ul>
+            </div>
+            <div class="text-center mb-3"><button class="btn btn-info" onclick="createAccount()">Tạo tài
+                    khoản</button>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Tên phòng ban</th>
+                <th scope="col">Tài khoản</th>
+                <th scope="col">Chuyên mục phụ trách</th>
+                <th scope="col">Chức năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(let i=0; i < account.length; i++){ %>
+                <tr id="<%= account[i].id %>">
+                    <td>
+                        <%= account[i].fullname %>
+                    </td>
+                    <td>
+                        <%= account[i].username %>
+                    </td>
+                    <td>
+                        <% for(let j=0; j < account[i].permission.length; j++){ %>
+                            <%= account[i].permission[j] %> <br>
+                                <% } %>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteAccount('<%= account[i].id %>')">Xóa</button>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#ex<%= account[i].id %>">Sửa</button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="ex<%= account[i].id %>" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa thông tin phòng ban
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-register w-50 m-auto">
+                                            <div class="mb-3">
+                                                <label class="form-label">Tài khoản</label>
+                                                <input type="text" class="form-control"
+                                                    id="username<%= account[i].id %>"
+                                                    placeholder="<%= account[i].username %>">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Tên Phòng/Khoa</label>
+                                                <input type="text" class="form-control"
+                                                    id="fullname<%= account[i].id %>"
+                                                    placeholder="<%= account[i].fullname %>">
+                                            </div>
+                                            <div class="dropdown mb-3">
+                                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                                                    id="dropdownMenuLink" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    Chọn chuyên mục
+                                                </a>
+
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                    <% for(let k=0; k < category.length; k++){ %>
+                                                        <li><a class="dropdown-item" href="#">
+                                                                <% if(account[i].permission.includes(category[k])){ %>
+                                                                    <input class="categoryCheckbox" type="checkbox"
+                                                                        name="permission<%=account[i].id%>"
+                                                                        value="<%=category[k] %>"
+                                                                        id="id<%=account[i].id%>" checked>
+                                                                    <%= category[k] %>
+                                                                        <% } else{ %>
+
+                                                                            <input class="categoryCheckbox"
+                                                                                type="checkbox"
+                                                                                name="permission<%=account[i].id%>"
+                                                                                value="<%=category[k] %>"
+                                                                                id="id<%=account[i].id%>">
+                                                                            <%= category[k] %>
+
+                                                                                <% } } %>
+                                                            </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Đổi mật khẩu</label>
+                                                <input type="password" class=" form-control"
+                                                    id="password<%= account[i].id %>" placeholder="Nhập mật khẩu mới">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Đóng</button>
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="updateAccount('<%=account[i].id%>')">Lưu thay
+                                            đổi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <% } %>
+        </tbody>
+    </table>
+
+    <script src="/javascripts/admin-manager.js"></script>

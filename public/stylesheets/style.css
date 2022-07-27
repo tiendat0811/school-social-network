@@ -1,7 +1,8 @@
-textarea{
+textarea {
   resize: none;
 }
-iframe{
+
+iframe {
   object-fit: cover;
   width: 80%;
 }
@@ -9,32 +10,40 @@ iframe{
 a,
 a:hover,
 a:focus {
-    color: inherit;
-    text-decoration: none;
-    transition: all 0.3s;
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
 }
-select{
+
+select {
   width: 100%;
 }
-.navbar{
+
+.navbar {
   background-color: #00B2FF;
 }
-.nav-item a:hover{
+
+.nav-item a:hover {
   background-color: #E1E8ED;
 }
-.navbar .nav-item{
+
+.navbar .nav-item {
   padding-right: 20px;
 }
-.new-notification{
+
+.new-notification {
   width: 500px;
   height: 300px;
   position: fixed;
 }
-.new-notification-2{
+
+.new-notification-2 {
   display: none;
-  z-index: 1; position: absolute;
+  z-index: 1;
+  position: absolute;
 }
-.user-avatar img{
+
+.user-avatar img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -43,95 +52,112 @@ select{
   border: 2px solid black;
 }
 
-.card{
+.card {
   position: fixed;
   left: 50%;
   transform: translate(-50%, 0);
   margin-top: 20px;
 }
-.time{
+
+.time {
   font-size: 0.8rem;
   color: rgb(99, 99, 99)
 }
+
 /*index.ejs*/
-.index .header{
+.index .header {
   height: 50px;
 }
-.row .navigation{
+
+.row .navigation {
   height: 800px;
 }
-.row .notification{
+
+.row .notification {
   height: 800px;
 }
 
 
-.new-post-student{
+.new-post-student {
   margin: 10px
 }
-.post{
+
+.post {
   width: 90%;
   background-color: #dfe3ee;
   margin: 20px auto;
   padding: 20px;
 }
-.post .caption{
+
+.post .caption {
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
 
 }
-.post .postOf .caption-left{
+
+.post .postOf .caption-left {
   width: 80%;
   text-align: left;
 }
-.post .postOf .caption-right{
+
+.post .postOf .caption-right {
   text-align: right;
 }
-.post .caption .caption-left input{
+
+.post .caption .caption-left input {
   display: none;
 }
-.post .caption .caption-left button{
+
+.post .caption .caption-left button {
   display: none;
 }
-.post .attach{
+
+.post .attach {
   text-align: center;
 }
 
-.post .attach img{
+.post .attach img {
   margin: 20px auto;
   width: 600px;
   height: 600px;
   object-fit: cover;
 }
-.post .attach .video{
+
+.post .attach .video {
   margin: 10px;
 }
+
 /* admin.ejs */
 
-.new-post-student .previewImage img{
+.new-post-student .previewImage img {
   width: 300px;
   height: 300px;
   margin: auto;
   object-fit: cover;
 }
-.previewImage{
+
+.previewImage {
   display: none;
 }
-.new-post-student .add-attach{
+
+.new-post-student .add-attach {
   display: flex;
 }
-.new-post-student .add-attach input[type=file]{
+
+.new-post-student .add-attach input[type=file] {
   display: none;
 }
 
 /* Comment */
-.comment .comment-content input{
+.comment .comment-content input {
   display: none;
 }
 
-.comment .comment-content .button-confirm button{
+.comment .comment-content .button-confirm button {
   display: none;
 }
-.tool-comment button{
+
+.tool-comment button {
   height: 60%;
 }
 
@@ -153,9 +179,11 @@ select{
   max-width: 80px;
   text-align: center;
 }
-#sidebar .sidebar-header h3{
+
+#sidebar .sidebar-header h3 {
   text-align: center;
 }
+
 #sidebar.active .sidebar-header h3,
 #sidebar.active .CTAs {
   display: none;
@@ -226,122 +254,107 @@ select{
 }
 
 /*-----------------------------------------------------
-        Notice
+Notice
 **************************************************/
-.notice-box{
-  margin-top: 50px;
-  border-radius: 10px;
-  width: 23%;
-  position: fixed;
-  overflow: auto;
-  height: 80%;
-}
-.notice-box-header{
-  position: fixed;
-  overflow: auto;
-}
-.notice-box a:hover{
+.float-noti a:hover {
   color: red;
-  cursor: pointer;
-  font-size: px;
-}
-.notice-box .one-notice{
-  border-bottom: 3px solid #33485c;
-  margin: 10px;
-}
-.notice-box .notice-date-time{
-  font-size: 12px;
-  color: rgb(99, 99, 99);
-  font-style: italic;
-}
-.notice-box .notice-summary{
-  font-size: 15px;
-  color: rgb(99, 99, 99);
-}
-.notice-box .notice-title{
-  font-size: 18px;
-  font-weight: bold;
 }
 
 /* notice page */
-.notice-list .one-notice{
-    border: 2px solid #33485c;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 25px;
+.notice-list .one-notice {
+  border: 2px solid #33485c;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 25px;
 }
-.notice-list .notice-date-time{
-    font-size: 15px;
-    color: rgb(99, 99, 99);
-    font-style: italic;
+
+.notice-list .notice-date-time {
+  font-size: 15px;
+  color: rgb(99, 99, 99);
+  font-style: italic;
 }
-.notice-list .notice-summary{
-    font-size: 15px;
+
+.notice-list .notice-summary {
+  font-size: 15px;
 }
-.notice-list .notice-title{
-    font-size: 20px;
-    color:royalblue;
+
+.notice-list .notice-title {
+  font-size: 20px;
+  color: royalblue;
 }
-.pagination .input-page{
-    width: 10%;
+
+.pagination .input-page {
+  width: 10%;
 }
-.notice-detail-header{
+
+.notice-detail-header {
   border: 2px solid #33485c;
   border-radius: 10px;
   text-align: center;
 }
-.notice-detail-header h5{
+
+.notice-detail-header h5 {
   margin-bottom: 0px;
 }
 
-.notice-detail .title{
+.notice-detail .title {
   font-size: 35px;
   font-weight: bold;
 }
-.notice-detail .date-time{
+
+.notice-detail .date-time {
   font-size: 18px;
   color: rgb(99, 99, 99);
   font-style: italic;
 }
-.notice-detail .summary{
+
+.notice-detail .summary {
   font-size: 25px;
   font-style: italic;
 }
-.notice-detail .detail{
+
+.notice-detail .detail {
   font-size: 20px;
 }
 
-.showNotification .date-time{
+.showNotification .date-time {
   font-size: 15px;
   color: rgb(99, 99, 99);
   font-style: italic;
 }
-.showNotification .title{
+
+.showNotification .title {
   font-size: 30px;
   font-weight: bold;
 }
-.showNotification .summary{
+
+.showNotification .summary {
   font-size: 25px;
   font-style: italic;
 }
-.showNotification .detail{
+
+.showNotification .detail {
   font-size: 20px;
 }
-.showNotification a:hover{
+
+.showNotification a:hover {
   color: red;
 }
-.showNotification input{
+
+.showNotification input {
   display: none;
 }
-.showNotification textarea{
+
+.showNotification textarea {
   display: none;
 }
-.showNotification .confirm-btn{
+
+.showNotification .confirm-btn {
   display: none;
 }
 
 /* Studen */
-.update-student-info img{
+.update-student-info img {
   width: 150px;
   height: 150px;
   object-fit: cover;
@@ -349,30 +362,33 @@ select{
   border: 5px solid #898F9C;
 }
 
-.fullname a:hover{
+.fullname a:hover {
   text-decoration: underline;
 }
 
-.showPost .attach iframe{
+.showPost .attach iframe {
   width: 560px;
   height: 315px;
 }
 
-.form-register .dropdown-toggle{
+.form-register .dropdown-toggle {
   width: 100%;
 }
 
 @media (max-width: 1300px) {
-  .col-md-2{
+  .col-md-2 {
     display: none;
   }
-  .col-md-3{
+
+  .col-md-3 {
     display: none;
   }
-  .col-md-7{
+
+  .col-md-7 {
     width: 100%;
   }
-  .showPost .attach iframe{
+
+  .showPost .attach iframe {
     width: 100%;
   }
 }

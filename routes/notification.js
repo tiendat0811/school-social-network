@@ -37,10 +37,10 @@ router.get('/', checkLogin, (req, res) => {
         for (let i = 0; i < data.length; i++) {
             category.push(data[i])
         }
-        res.render('notification', { user: req.data, category: category })
+        res.render('notification', { title: "Thông báo", user: req.data, category: category })
     }).catch(err => {
         console.log(err)
-        res.render('index')
+        res.redirect('/')
     })
 })
 
@@ -63,7 +63,7 @@ router.get('/:category/:p', (req, res) => {
 
 router.get('/:id?', checkLogin, (req, res) => {
     Notifications.findOne({ _id: req.params.id }).then(data => {
-        res.render('notification-detail', { user: req.data, notification: data })
+        res.render('notification-detail', { title: "Chi tiết thông báo", user: req.data, notification: data })
     })
 })
 

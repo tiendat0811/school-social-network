@@ -1,0 +1,48 @@
+<div class="bg-dark p-2 mt-3 notice-detail-header">
+    <h5 class="text-white">TRANG QUẢN TRỊ VIÊN</h5>
+
+</div>
+<div class=" mt-3 p-2 d-flex justify-content-around">
+    <a href="/student"><button>Trang cá nhân</button></a>
+    <a href="/manager"><button>Trang phòng khoa</button> </a>
+</div>
+<div class="center-item border border-3 mt-3 rounded rounded-3">
+    <!-- code here -->
+    <div class="title text-center m-2">
+        <h3>Tạo tài khoản phòng/khoa</h3>
+    </div>
+    <div class="form-register w-50 m-auto">
+        <div class="mb-3">
+            <label for="username" class="form-label">Tài khoản</label>
+            <input type="text" class="form-control" id="username" placeholder="">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Mật khẩu</label>
+            <input type="password" class="form-control" id="password" placeholder="">
+        </div>
+        <div class="mb-3">
+            <label for="fullname" class="form-label">Tên Phòng/Khoa</label>
+            <input type="text" class="form-control" id="fullname" placeholder="">
+        </div>
+        <div class="dropdown mb-3">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Chọn chuyên mục
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <% for(let i=0; i < category.length; i++){ %>
+                    <li><a class="dropdown-item" href="#">
+                            <input class="categoryCheckbox" type="checkbox" name="permission" value="<%=category[i] %>"
+                                id="<%=category[i]%>">
+                            <%= category[i] %>
+                                <% } %>
+                        </a></li>
+            </ul>
+        </div>
+        <div class="text-center mb-3"><button class="btn btn-info" onclick="createAccount()">Tạo tài
+                khoản</button>
+        </div>
+    </div>
+
+</div>

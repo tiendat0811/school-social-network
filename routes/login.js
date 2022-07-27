@@ -20,13 +20,12 @@ Users.findOne({ username: 'admin' }).then(data => {
 })
 
 router.get('/', (req, res) => {
-    res.render('login')
+    res.render('login', { title: "Login" })
 })
 
 router.post('/', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
-    console.log('login')
     Users.findOne({ username: username }, (err, user) => {
         if (err) {
             return console.log(err)
@@ -36,7 +35,6 @@ router.post('/', (req, res) => {
         }
         bcrypt.compare(password, user.password).then(function (result) {
             if (result) {
-                console.log('login success')
                 var token = jwt.sign({ _id: user._id }, 'tiendat', { expiresIn: '30m' })
                 return res.json({ status: true, token: token })
             }
